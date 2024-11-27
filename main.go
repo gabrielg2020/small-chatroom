@@ -12,7 +12,7 @@ func main() {
 	// Create a new hub
 	hub := NewHub()
 	// Run hub in a goroutine
-	// go hub.run()
+	go hub.Run()
 
 	// Sever entry point
 	router.GET("/", func(ctx *gin.Context) {
