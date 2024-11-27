@@ -35,6 +35,13 @@ type Client struct {
 }
 
 // readPump pumps messages from the websocket connection to the hub.
+// Logic Explanation:
+//  1. Set the max message size and initial read deadline
+//  2. Define the pong handler to reset the read deadline
+//  3. Continuously read messages from the connection
+//     3.a Read a message from the connection
+//     3.b Clean up the message
+//     3.c Send the message to the hub
 func (c *Client) ReadPump() {
 	defer func() {
 		// On exit, unregister the client and close the connection
@@ -73,6 +80,13 @@ func (c *Client) ReadPump() {
 }
 
 // writePump pumps messages from the hub to the websocket connection.
+// Logic Explanation:
+//  1. Create a ticker to send ping messages
+//  2. Continuously listen for messages
+//     2.a Write a message to the connection
+//     2.b Write the message to the WebSocket connection
+//     2.c Add queued chat messages to the current websocket message
+//     2.d Close the writer
 func (c *Client) WritePump() {
 	// Create a ticker to send ping messages
 	ticker := time.NewTicker(pingPeriod)
